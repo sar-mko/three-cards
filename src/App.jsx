@@ -7,6 +7,8 @@ function App() {
   // const [count, setCount] = useState(0)
   const img1 = useRef(null);
   const img2 = useRef(null);
+  const img3 = useRef(null);
+  const img4 = useRef(null);
   const [winner, setWinner] = useState('Who Wins?');
   const DECK_ID = 'kls23f526wq1'
   // const text1 = document.querySelector('h3')
@@ -38,29 +40,33 @@ function App() {
   }
   async function getCard() {
       try {
-          const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=2`)
+          const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=4`)
           const data = await res.json()
           if(data.success){
               img1.current.src = data.cards[0].image
               img2.current.src = data.cards[1].image
-  
+              img3.current.src = data.cards[2].image
+              img4.current.src = data.cards[3].image
           }
+          console.log(data)
           //from the card's code, grab everything before the last letter
-          let playerOneCode = data.cards[0].code.slice(0,-1)
-          console.log('code' , data.cards[0].code, 'slice', playerOneCode)
+          let playerOneCode1 = winners[data.cards[0].code.slice(0,-1)]
+          let playerOneCode2 = winners[data.cards[1].code.slice(0,-1)]
+          // console.log('code' , data.cards[0].code, 'slice', playerOneCode1)
          
-          let playerTwoCode = data.cards[1].code.slice(0,-1)
-          console.log('code' , data.cards[1].code, 'slice', playerTwoCode)
-          findWinner(playerOneCode, playerTwoCode)
+          let playerTwoCode1 = winners[data.cards[2].code.slice(0,-1)]
+          let playerTwoCode2 = winners[data.cards[3].code.slice(0,-1)]
+          // console.log('code' , data.cards[1].code, 'slice', playerTwoCode)
+          findWinner(playerOneCode1,playerOneCode2, playerTwoCode1, playerTwoCode2)
       }catch(err){
           console.log(err)
       }
   }
   
-  function findWinner(cardOne,cardTwo){
-      if(winners[cardOne] < winners[cardTwo]){
+  function findWinner(p1CardOne,p1CardTwo,p2CardOne,p2CardTwo){
+      if(p1CardOne + p1CardTwo < p2CardOne + p2CardTwo ){
           setWinner('Player One Wins!')
-      }else if(winners[cardOne] > winners[cardTwo]){
+      }else if(p1CardOne + p1CardTwo > p2CardOne + p2CardTwo ){
           setWinner('Player Two Wins!')
       }else{
           setWinner('Tie :)')
@@ -78,11 +84,13 @@ function App() {
         <div>
             <h2>Player one</h2>
             <img ref={img1} id="img1" alt=""/>
+            <img ref={img2} id="img2" alt=""/>
         </div>
         
         <div>
             <h2>Player two</h2>
-            <img ref={img2} id="img2" alt=""/>
+            <img ref={img3} id="img3" alt=""/>
+            <img ref={img4} id="img4" alt=""/>
         </div>
     </section>
     <h3>{winner}</h3>
