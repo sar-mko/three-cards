@@ -15,6 +15,7 @@ function App() {
   // const img1 = document.getElementById('img1')
   // const img2 = document.getElementById('img2')
   const winners = {'A':0,'K':1,'Q':2,'J':3,0:4,9:5,8:6,7:7,6:8,5:9,4:10,3:11,2:12}
+  const check = {'A':1,'K':10,'Q':10,'J':10, 0:10}
   // const winnerText = document.querySelector('h3')
   
   useEffect(() => {
@@ -42,11 +43,15 @@ function App() {
       try {
           const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=4`)
           const data = await res.json()
+
           if(data.success){
               img1.current.src = data.cards[0].image
               img2.current.src = data.cards[1].image
               img3.current.src = data.cards[2].image
               img4.current.src = data.cards[3].image
+          }
+          if(data.remaining < 4){
+            getDeck()
           }
           console.log(data)
           //from the card's code, grab everything before the last letter
@@ -60,6 +65,7 @@ function App() {
           findWinner(playerOneCode1,playerOneCode2, playerTwoCode1, playerTwoCode2)
       }catch(err){
           console.log(err)
+          // getDeck()
       }
   }
   
