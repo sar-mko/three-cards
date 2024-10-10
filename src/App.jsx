@@ -9,6 +9,9 @@ function App() {
   const img2 = useRef(null);
   const img3 = useRef(null);
   const img4 = useRef(null);
+  const imgz = useRef(null);
+  const imgy = useRef(null);
+
   const [winner, setWinner] = useState('Who Wins?');
   const DECK_ID = 'kls23f526wq1'
   // const text1 = document.querySelector('h3')
@@ -43,7 +46,7 @@ function App() {
       try {
           const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=4`)
           const data = await res.json()
-
+          resetDeck('one')
           if(data.success){
               img1.current.src = data.cards[0].image
               img2.current.src = data.cards[1].image
@@ -68,6 +71,24 @@ function App() {
           // getDeck()
       }
   }
+  async function getOneCard() {
+    try {
+        const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=1`)
+        const data = await res.json()
+
+        if(data.success){
+            imgz.current.src = data.cards[0].image
+        }
+        if(data.remaining < 4){
+          getDeck()
+        }
+        console.log(data)
+
+    }catch(err){
+        console.log(err)
+        // getDeck()
+    }
+}
   
   function findWinner(p1CardOne,p1CardTwo,p2CardOne,p2CardTwo){
       if(p1CardOne + p1CardTwo < p2CardOne + p2CardTwo ){
@@ -79,24 +100,43 @@ function App() {
       }
   }
   
+  function resetDeck(option){
+    if(option === 'all'){
+      img1.current.src = ''
+      img2.current.src = ''
+      img3.current.src = ''
+      img4.current.src = ''
+      imgz.current.src = ''
+      setWinner('Who wins?')
+    }else if(option === 'one'){
+      imgz.current.src = ''
+    }
+    // imgy = useRef(null)
+  }
+
   return (
     <>
     <h1>Higher Cards</h1>
 
     <button onClick={() => getDeck()}>Shuffle Deck</button>
     <button onClick={() => getCard()}>Hand Cards</button>
+    <button onClick={() => resetDeck('all')}>Reset Deck</button>
 
     <section>
         <div>
             <h2>Player one</h2>
             <img ref={img1} id="img1" alt=""/>
             <img ref={img2} id="img2" alt=""/>
+            <img ref={imgz} id="imgz" alt=""/>
+            <button onClick={() => getOneCard()}>add a card</button>
         </div>
         
         <div>
             <h2>Player two</h2>
             <img ref={img3} id="img3" alt=""/>
             <img ref={img4} id="img4" alt=""/>
+            <img ref={imgy} id="imgy" alt=""/>
+            <button onClick={() => getOneCard()}>add a card</button>
         </div>
     </section>
     <h3>{winner}</h3>
