@@ -14,7 +14,10 @@ function App() {
   // const imgy = useRef(null);
 
   const [winner, setWinner] = useState('Who Wins?');
-  const [cards, setCards] = useState('')
+  const [cards, setCards] = useState([])
+  const [playerOneCode, SetPlayerOneCode] = useState([])
+  const [playerTwoCode, SetPlayerTwoCode] = useState([])
+
   const DECK_ID = 'kls23f526wq1'
   // const text1 = document.querySelector('h3')
   // const img1 = document.getElementById('img1')
@@ -24,14 +27,8 @@ function App() {
   // const winnerText = document.querySelector('h3')
   
   useEffect(() => {
-    // const element = img1.current;
-    // const element2 = img2.current;
-    // console.log(element);
-    // console.log(element.id);
-    // console.log(element2);
-    // console.log(winnerText)
-    // console.log(element.src)
-  }, []);
+   
+  }, [cards]);
   
   async function getDeck() {
       try {
@@ -48,13 +45,7 @@ function App() {
       try {
           const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=4`)
           const data = await res.json()
-          resetDeck('one')
-          // if(data.success){
-          //     img1.current.src = data.cards[0].image
-          //     img2.current.src = data.cards[1].image
-          //     img3.current.src = data.cards[2].image
-          //     img4.current.src = data.cards[3].image
-          // }
+          resetDeck()
           if(data.success){
                 setCards(data.cards)
         //     )
@@ -62,16 +53,11 @@ function App() {
           if(data.remaining < 4){
             getDeck()
           }
-          console.log(data)
-          //from the card's code, grab everything before the last letter
-          let playerOneCode = [winners[cards[0].code.slice(0,-1)], winners[cards[1].code.slice(0,-1)]]
-          let playerTwoCode = [winners[cards[2].code.slice(0,-1)], winners[cards[3].code.slice(0,-1)]]
 
-          console.log('code' , data.cards[0].code, 'slice', playerOneCode)
+          SetPlayerOneCode([winners[cards[0].code.slice(0,-1)], winners[cards[1].code.slice(0,-1)]])
           
-          // let playerTwoCode1 = winners[data.cards[2].code.slice(0,-1)]
-          // let playerTwoCode2 = winners[data.cards[3].code.slice(0,-1)]
-          // console.log('code' , data.cards[1].code, 'slice', playerTwoCode)
+          SetPlayerTwoCode([winners[cards[2].code.slice(0,-1)], winners[cards[3].code.slice(0,-1)]])
+
           findWinner(playerOneCode, playerTwoCode )
           // findWinner(playerOneCode1,playerOneCode2, playerTwoCode1, playerTwoCode2)
       }catch(err){
@@ -79,24 +65,6 @@ function App() {
           // getDeck()
       }
   }
-//   async function getOneCard() {
-//     try {
-//         const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=1`)
-//         const data = await res.json()
-
-//         if(data.success){
-//             imgz.current.src = data.cards[0].image
-//         }
-//         if(data.remaining < 4){
-//           getDeck()
-//         }
-//         console.log(data)
-
-//     }catch(err){
-//         console.log(err)
-//         // getDeck()
-//     }
-// }
   
   function findWinner(pOne, pTwo){
       if(pOne[0] + pOne[1] < pTwo[0] + pTwo[1]){

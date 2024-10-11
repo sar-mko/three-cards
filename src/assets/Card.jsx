@@ -4,13 +4,15 @@ const Card = (item) => {
     const [imgSource, SetImgSource] = useState('')
 
     useEffect(() => {
-        item ? SetImgSource(item.image) :  SetImgSource('')
+        {console.log(item, item.item.image)}
+        item ? SetImgSource(item.item.image) :  SetImgSource('')
     }
     ,[item])
 
 
   return (
     <>
+
         <img src={imgSource}  alt=""/>
     </>
   )

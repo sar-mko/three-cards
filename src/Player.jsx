@@ -3,7 +3,7 @@ import Card from './assets/Card'
 
 const Player = ({playerNum, data}) => {
     // const players = {player1:[0,1], player2:[2,3]}
-    const [playerData, SetPlayerData] = useState([data])
+    const [playerData, SetPlayerData] = useState('')
 
     function makeNewCard(){
 
@@ -12,14 +12,12 @@ const Player = ({playerNum, data}) => {
     useEffect(() => {
         console.log(data)
         if(data && playerNum === 1 ){
-            SetPlayerData(data.cards.slice(0,2))
+            SetPlayerData(data.slice(0,2))
             // setCardCode()
         }else if(data && playerNum === 2 ){
-            SetPlayerData(data.cards.slice(2))
-        }else {
-            SetPlayerData(false)
+            SetPlayerData(data.slice(2))
         }
-
+        console.log(playerData)
     }
     ,[data])
 
