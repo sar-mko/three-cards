@@ -2,17 +2,19 @@ import {useRef, useEffect, useState} from 'react';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
+import Player from './Player';
 
 function App() {
   // const [count, setCount] = useState(0)
-  const img1 = useRef(null);
-  const img2 = useRef(null);
-  const img3 = useRef(null);
-  const img4 = useRef(null);
-  const imgz = useRef(null);
-  const imgy = useRef(null);
+  // const img1 = useRef(null);
+  // const img2 = useRef(null);
+  // const img3 = useRef(null);
+  // const img4 = useRef(null);
+  // const imgz = useRef(null);
+  // const imgy = useRef(null);
 
   const [winner, setWinner] = useState('Who Wins?');
+  const [cards, setCards] = useState('')
   const DECK_ID = 'kls23f526wq1'
   // const text1 = document.querySelector('h3')
   // const img1 = document.getElementById('img1')
@@ -22,11 +24,11 @@ function App() {
   // const winnerText = document.querySelector('h3')
   
   useEffect(() => {
-    const element = img1.current;
-    const element2 = img2.current;
-    console.log(element);
-    console.log(element.id);
-    console.log(element2);
+    // const element = img1.current;
+    // const element2 = img2.current;
+    // console.log(element);
+    // console.log(element.id);
+    // console.log(element2);
     // console.log(winnerText)
     // console.log(element.src)
   }, []);
@@ -47,53 +49,59 @@ function App() {
           const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=4`)
           const data = await res.json()
           resetDeck('one')
+          // if(data.success){
+          //     img1.current.src = data.cards[0].image
+          //     img2.current.src = data.cards[1].image
+          //     img3.current.src = data.cards[2].image
+          //     img4.current.src = data.cards[3].image
+          // }
           if(data.success){
-              img1.current.src = data.cards[0].image
-              img2.current.src = data.cards[1].image
-              img3.current.src = data.cards[2].image
-              img4.current.src = data.cards[3].image
-          }
+                setCards(data)
+        //     )
+        }
           if(data.remaining < 4){
             getDeck()
           }
           console.log(data)
           //from the card's code, grab everything before the last letter
-          let playerOneCode1 = winners[data.cards[0].code.slice(0,-1)]
-          let playerOneCode2 = winners[data.cards[1].code.slice(0,-1)]
-          // console.log('code' , data.cards[0].code, 'slice', playerOneCode1)
-         
-          let playerTwoCode1 = winners[data.cards[2].code.slice(0,-1)]
-          let playerTwoCode2 = winners[data.cards[3].code.slice(0,-1)]
+          let playerOneCode = [winners[cards[0].code.slice(0,-1)], winners[cards[1].code.slice(0,-1)]]
+          let playerTwoCode = [winners[cards[2].code.slice(0,-1)], winners[cards[3].code.slice(0,-1)]]
+
+          console.log('code' , data.cards[0].code, 'slice', playerOneCode1)
+          
+          // let playerTwoCode1 = winners[data.cards[2].code.slice(0,-1)]
+          // let playerTwoCode2 = winners[data.cards[3].code.slice(0,-1)]
           // console.log('code' , data.cards[1].code, 'slice', playerTwoCode)
-          findWinner(playerOneCode1,playerOneCode2, playerTwoCode1, playerTwoCode2)
+          findWinner(playerOneCode, playerTwoCode )
+          // findWinner(playerOneCode1,playerOneCode2, playerTwoCode1, playerTwoCode2)
       }catch(err){
           console.log(err)
           // getDeck()
       }
   }
-  async function getOneCard() {
-    try {
-        const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=1`)
-        const data = await res.json()
+//   async function getOneCard() {
+//     try {
+//         const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=1`)
+//         const data = await res.json()
 
-        if(data.success){
-            imgz.current.src = data.cards[0].image
-        }
-        if(data.remaining < 4){
-          getDeck()
-        }
-        console.log(data)
+//         if(data.success){
+//             imgz.current.src = data.cards[0].image
+//         }
+//         if(data.remaining < 4){
+//           getDeck()
+//         }
+//         console.log(data)
 
-    }catch(err){
-        console.log(err)
-        // getDeck()
-    }
-}
+//     }catch(err){
+//         console.log(err)
+//         // getDeck()
+//     }
+// }
   
-  function findWinner(p1CardOne,p1CardTwo,p2CardOne,p2CardTwo){
-      if(p1CardOne + p1CardTwo < p2CardOne + p2CardTwo ){
+  function findWinner(pOne, pTwo){
+      if(pOne[0] + pOne[1] < pTwo[0] + pTwo[1]){
           setWinner('Player One Wins!')
-      }else if(p1CardOne + p1CardTwo > p2CardOne + p2CardTwo ){
+      }else if(pOne[0] + pOne[1] > pTwo[0] + pTwo[1]){
           setWinner('Player Two Wins!')
       }else{
           setWinner('Tie :)')
@@ -102,12 +110,8 @@ function App() {
   
   function resetDeck(option){
     if(option === 'all'){
-      img1.current.src = ''
-      img2.current.src = ''
-      img3.current.src = ''
-      img4.current.src = ''
-      imgz.current.src = ''
-      setWinner('Who wins?')
+      setCards('')
+      // setWinner('Who wins?')
     }else if(option === 'one'){
       imgz.current.src = ''
     }
@@ -116,15 +120,20 @@ function App() {
 
   return (
     <>
+    {console.log(cards)}
     <h1>Higher Cards</h1>
 
     <button onClick={() => getDeck()}>Shuffle Deck</button>
     <button onClick={() => getCard()}>Hand Cards</button>
     <button onClick={() => resetDeck('all')}>Reset Deck</button>
+    <Player id={'ply1'} playerNum={1} data={cards} />
+    <Player id={'ply2'} playerNum={2} data={cards} />
+    {/* <section>
 
-    <section>
         <div>
+          
             <h2>Player one</h2>
+            
             <img ref={img1} id="img1" alt=""/>
             <img ref={img2} id="img2" alt=""/>
             <img ref={imgz} id="imgz" alt=""/>
@@ -138,7 +147,7 @@ function App() {
             <img ref={imgy} id="imgy" alt=""/>
             <button onClick={() => getOneCard()}>add a card</button>
         </div>
-    </section>
+    </section> */}
     <h3>{winner}</h3>
 
 </>
