@@ -11,13 +11,13 @@ function App() {
   const [playerTwoCode, SetPlayerTwoCode] = useState([])
 
   const DECK_ID = 'kls23f526wq1'
-  const winners = {'A':0,'K':1,'Q':2,'J':3,0:4,9:5,8:6,7:7,6:8,5:9,4:10,3:11,2:12}
-//   const check = {'A':1,'K':10,'Q':10,'J':10, 0:10}
-  // const winnerText = document.querySelector('h3')
-  
+  const winners = {'A':1,'K':10,'Q':10,'J':10,0:10,9:9,8:8,7:7,6:6,5:5,4:4,3:3,2:2}
+
   useEffect(() => {
-    
-  }, [cards]);
+    if (playerOneCode.length > 0 && playerTwoCode.length > 0) {
+      findWinner(playerOneCode, playerTwoCode);
+    }
+  }, [playerOneCode, playerTwoCode]);
   
   async function getDeck() {
       try {
@@ -33,18 +33,25 @@ function App() {
       try {
           const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=4`)
           const data = await res.json()
-          console.log(data)
+
           if(data.success){
-            console.log('oh')
-                setCards(data.cards)
-                console.log('hi')
-                SetPlayerOneCode([winners[data.cards[0].code.slice(0,-1)], winners[data.cards[1].code.slice(0,-1)]])
-                console.log('check again')
-                SetPlayerTwoCode([winners[data.cards[2].code.slice(0,-1)], winners[data.cards[3].code.slice(0,-1)]])
-                console.log(1, winner)
-                await findWinner(playerOneCode, playerTwoCode)
-                console.log(2, winner)
-        //     )
+
+            const newCards = data.cards
+
+                setCards(newCards);
+
+                const newPlayerOneCode = [
+                    winners[newCards[0].code.slice(0, -1)], 
+                    winners[newCards[1].code.slice(0, -1)]
+                  ];
+                  
+                  const newPlayerTwoCode = [
+                    winners[newCards[2].code.slice(0, -1)], 
+                    winners[newCards[3].code.slice(0, -1)]
+                  ];
+
+                SetPlayerOneCode(newPlayerOneCode)
+                SetPlayerTwoCode(newPlayerTwoCode)
         }
           if(data.remaining < 4){
             getDeck()
@@ -56,6 +63,7 @@ function App() {
   }
   
   function findWinner(pOne, pTwo){
+    console.log('no', pOne, pTwo)
       if(pOne[0] + pOne[1] > pTwo[0] + pTwo[1]){
           setWinner('Player One Wins!')
       }else if(pOne[0] + pOne[1] < pTwo[0] + pTwo[1]){

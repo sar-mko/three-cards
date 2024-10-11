@@ -2,22 +2,15 @@ import React, { useState, useEffect } from 'react'
 import Card from './assets/Card'
 
 const Player = ({playerNum, data}) => {
-    // const players = {player1:[0,1], player2:[2,3]}
     const [playerData, SetPlayerData] = useState('')
-
-    function makeNewCard(){
-
-    }
  
     useEffect(() => {
-        console.log(data)
+        // console.log(data)
         if(data && playerNum === 1 ){
             SetPlayerData(data.slice(0,2))
-            // setCardCode()
         }else if(data && playerNum === 2 ){
             SetPlayerData(data.slice(2))
         }
-        console.log(playerData)
     }
     ,[data])
 
