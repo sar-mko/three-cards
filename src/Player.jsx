@@ -21,11 +21,6 @@ const Player = ({playerNum, data}) => {
     }
     ,[data])
 
-    // async function assignCards(){
-    //         data.cards.forEach(item => {
-    //             <Card item={item} />
-    //         })
-    // }
   return (
     <>
         <div>
@@ -33,7 +28,6 @@ const Player = ({playerNum, data}) => {
             {playerData.length ?  playerData.map(item => 
                 <Card key={crypto.randomUUID()} item={item} />
             ) : <Card key={crypto.randomUUID()} item={false} />}
-            <button onClick={() => getOneCard()}>add a card</button>
         </div>
     </>
   )
