@@ -63,7 +63,6 @@ function App() {
   }
   
   function findWinner(pOne, pTwo){
-    console.log('no', pOne, pTwo)
       if(pOne[0] + pOne[1] > pTwo[0] + pTwo[1]){
           setWinner('Player One Wins!')
       }else if(pOne[0] + pOne[1] < pTwo[0] + pTwo[1]){
@@ -71,13 +70,11 @@ function App() {
       }else{
           setWinner('Tie :)')
       }
-      console.log('did we get here')
-
   }
   
   function resetDeck(option){
-          setCards('')
-            setWinner('Who wins?')
+    setCards([]);
+    setWinner('who wins?')
   }
 
   return (
@@ -86,7 +83,7 @@ function App() {
 
     <button onClick={() => getDeck()}>Shuffle Deck</button>
     <button onClick={() => getCard()}>Hand Cards</button>
-    <button onClick={() => resetDeck('all')}>Reset Deck</button>
+    <button onClick={() => resetDeck()}>Reset Deck</button>
     <Player id={'ply1'} playerNum={1} data={cards} />
     <Player id={'ply2'} playerNum={2} data={cards} />
     <button onClick={() => getOneCard()}>add a card</button>
