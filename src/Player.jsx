@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import Card from './assets/Card'
+import Card from './Card'
 
-const Player = ({playerNum, data}) => {
-    const [playerData, SetPlayerData] = useState('')
+const Player = ({playerNum, data, addCard}) => {
+    const [playerData, setPlayerData] = useState([])
  
     useEffect(() => {
-        // console.log(data)
-        if(data && playerNum === 1 ){
-            SetPlayerData(data.slice(0,2))
-        }else if(data && playerNum === 2 ){
-            SetPlayerData(data.slice(2))
-        }
+        setPlayerData(data)
     }
     ,[data])
 
+    // const getCard = () => {
+    //     const newCard = addCard();
+    //     setPlayerData(prevData => [...prevData, newCard]);
+
+    // }
   return (
     <>
         <div>
@@ -21,6 +21,8 @@ const Player = ({playerNum, data}) => {
             {playerData.length ?  playerData.map(item => 
                 <Card key={crypto.randomUUID()} item={item} />
             ) : <Card key={crypto.randomUUID()} item={false} />}
+            {/* <button>add a card</button> */}
+            <button onClick={() => addCard(playerNum)}>add a card</button>
         </div>
     </>
   )

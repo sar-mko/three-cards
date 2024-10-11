@@ -7,8 +7,8 @@ import Player from './Player';
 function App() {
   const [winner, setWinner] = useState('Who Wins?');
   const [cards, setCards] = useState([])
-  const [playerOneCode, SetPlayerOneCode] = useState([])
-  const [playerTwoCode, SetPlayerTwoCode] = useState([])
+  const [playerOneCode, setPlayerOneCode] = useState([])
+  const [playerTwoCode, setPlayerTwoCode] = useState([])
 
   const DECK_ID = 'kls23f526wq1'
   const winners = {'A':1,'K':10,'Q':10,'J':10,0:10,9:9,8:8,7:7,6:6,5:5,4:4,3:3,2:2}
@@ -50,8 +50,8 @@ function App() {
                     winners[newCards[3].code.slice(0, -1)]
                   ];
 
-                SetPlayerOneCode(newPlayerOneCode)
-                SetPlayerTwoCode(newPlayerTwoCode)
+                setPlayerOneCode(newPlayerOneCode)
+                setPlayerTwoCode(newPlayerTwoCode)
         }
           if(data.remaining < 4){
             getDeck()
@@ -61,6 +61,32 @@ function App() {
           console.log(err)
       }
   }
+
+  const addCard = async (playerNum) => {
+    try {
+        const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/draw/?count=1`)
+        const data = await res.json()
+
+        if(data.success){
+        const newCard = data.cards[0];
+        setCards(prevCards => [...prevCards, newCard]); 
+        if(playerNum === 1 ){
+            setPlayerOneCode(prevCards => [...prevCards, newCard])
+        }else if(data && playerNum === 2 ){
+            setPlayerTwoCode(prevCards => [...prevCards, newCard])
+        }
+        return newCard;
+        }
+
+        if(data.remaining < 4){
+          getDeck()
+        }
+
+    }catch(err){
+        console.log(err)
+    }
+
+  };
   
   function findWinner(pOne, pTwo){
       if(pOne[0] + pOne[1] > pTwo[0] + pTwo[1]){
@@ -79,17 +105,18 @@ function App() {
 
   return (
     <>
-    <h1>Higher Cards</h1>
+        <h1>Higher Cards</h1>
 
-    <button onClick={() => getDeck()}>Shuffle Deck</button>
-    <button onClick={() => getCard()}>Hand Cards</button>
-    <button onClick={() => resetDeck()}>Reset Deck</button>
-    <Player id={'ply1'} playerNum={1} data={cards} />
-    <Player id={'ply2'} playerNum={2} data={cards} />
-    <button onClick={() => getOneCard()}>add a card</button>
-    <h3>{winner}</h3>
+        <button onClick={() => getDeck()}>Shuffle Deck</button>
+        <button onClick={() => getCard()}>Hand Cards</button>
+        <button onClick={() => resetDeck()}>Reset Deck</button>
 
-</>
+        <Player id={'ply1'} playerNum={1} data={cards} addCard={addCard}  />
+        <Player id={'ply2'} playerNum={2} data={cards} addCard={addCard}/>
+
+        {/* <button onClick={() => addCard()}>add a card</button> */}
+        <h3>{winner}</h3>
+    </>
    
   )
 }
