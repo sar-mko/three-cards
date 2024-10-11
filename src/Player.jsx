@@ -15,7 +15,7 @@ const Player = ({playerNum, data}) => {
             SetPlayerData(data.cards.slice(0,2))
             // setCardCode()
         }else if(data && playerNum === 2 ){
-            SetPlayerData(data.cards.slice(0,2))
+            SetPlayerData(data.cards.slice(2))
         }else {
             SetPlayerData(false)
         }

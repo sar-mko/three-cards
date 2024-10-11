@@ -38,7 +38,7 @@ function App() {
           const res = await fetch(`https://www.deckofcardsapi.com/api/deck/${DECK_ID}/shuffle/`)
           const data = await res.json()   
           console.log('shuffled')     
-          console.log(img1, img2)
+          // console.log(img1, img2)
       }catch(err){
           console.log(err)
       }
@@ -56,7 +56,7 @@ function App() {
           //     img4.current.src = data.cards[3].image
           // }
           if(data.success){
-                setCards(data)
+                setCards(data.cards)
         //     )
         }
           if(data.remaining < 4){
@@ -67,7 +67,7 @@ function App() {
           let playerOneCode = [winners[cards[0].code.slice(0,-1)], winners[cards[1].code.slice(0,-1)]]
           let playerTwoCode = [winners[cards[2].code.slice(0,-1)], winners[cards[3].code.slice(0,-1)]]
 
-          console.log('code' , data.cards[0].code, 'slice', playerOneCode1)
+          console.log('code' , data.cards[0].code, 'slice', playerOneCode)
           
           // let playerTwoCode1 = winners[data.cards[2].code.slice(0,-1)]
           // let playerTwoCode2 = winners[data.cards[3].code.slice(0,-1)]
@@ -109,13 +109,15 @@ function App() {
   }
   
   function resetDeck(option){
-    if(option === 'all'){
-      setCards('')
-      // setWinner('Who wins?')
-    }else if(option === 'one'){
-      imgz.current.src = ''
-    }
+    // if(option === 'all'){
+    //   setCards('')
+    //   // setWinner('Who wins?')
+    // }else if(option === 'one'){
+    //   imgz.current.src = ''
+    // }
     // imgy = useRef(null)
+          setCards('')
+      setWinner('Who wins?')
   }
 
   return (
