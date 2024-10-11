@@ -9,6 +9,8 @@ function App() {
   const [cards, setCards] = useState([])
   const [playerOneCode, setPlayerOneCode] = useState([])
   const [playerTwoCode, setPlayerTwoCode] = useState([])
+  const [playerOneData, setPlayerOneData] = useState([])
+  const [playerTwoData, setPlayerTwoData] = useState([])
 
   const DECK_ID = 'kls23f526wq1'
   const winners = {'A':1,'K':10,'Q':10,'J':10,0:10,9:9,8:8,7:7,6:6,5:5,4:4,3:3,2:2}
@@ -49,9 +51,15 @@ function App() {
                     winners[newCards[2].code.slice(0, -1)], 
                     winners[newCards[3].code.slice(0, -1)]
                   ];
+                
+                const p1Data = newCards.slice(0,2)
+                const p2Data = newCards.slice(2)
 
                 setPlayerOneCode(newPlayerOneCode)
                 setPlayerTwoCode(newPlayerTwoCode)
+
+                setPlayerOneData(p1Data)
+                setPlayerTwoData(p2Data)
         }
           if(data.remaining < 4){
             getDeck()
@@ -72,8 +80,10 @@ function App() {
         setCards(prevCards => [...prevCards, newCard]); 
         if(playerNum === 1 ){
             setPlayerOneCode(prevCards => [...prevCards, newCard])
+            setPlayerOneData(prevCards => [...prevCards, newCard])
         }else if(data && playerNum === 2 ){
             setPlayerTwoCode(prevCards => [...prevCards, newCard])
+            setPlayerTwoData(prevCards => [...prevCards, newCard])
         }
         return newCard;
         }
@@ -100,6 +110,8 @@ function App() {
   
   function resetDeck(option){
     setCards([]);
+    setPlayerOneData([]);
+    setPlayerTwoData([]);
     setWinner('who wins?')
   }
 
@@ -110,9 +122,9 @@ function App() {
         <button onClick={() => getDeck()}>Shuffle Deck</button>
         <button onClick={() => getCard()}>Hand Cards</button>
         <button onClick={() => resetDeck()}>Reset Deck</button>
-
-        <Player id={'ply1'} playerNum={1} data={cards} addCard={addCard}  />
-        <Player id={'ply2'} playerNum={2} data={cards} addCard={addCard}/>
+        {/* newCards[0].code.slice(0, -1) */}
+        <Player id={'ply1'} playerNum={1} data={playerOneData} addCard={addCard}  />
+        <Player id={'ply2'} playerNum={2} data={playerTwoData} addCard={addCard}/>
 
         {/* <button onClick={() => addCard()}>add a card</button> */}
         <h3>{winner}</h3>

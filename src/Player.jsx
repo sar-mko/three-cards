@@ -5,6 +5,12 @@ const Player = ({playerNum, data, addCard}) => {
     const [playerData, setPlayerData] = useState([])
  
     useEffect(() => {
+        // if(playerNum === 1 ){
+        //     setPlayerOneCode(prevCards => [...prevCards, newCard])
+        // }else if(data && playerNum === 2 ){
+        //     setPlayerTwoCode(prevCards => [...prevCards, newCard])
+        // }
+        // return newCard;
         setPlayerData(data)
     }
     ,[data])
