@@ -13,6 +13,7 @@ function App() {
   const [playerTwoData, setPlayerTwoData] = useState([])
 
   const DECK_ID = 'kls23f526wq1'
+  // A is 11 if sum is less then 21 else == 1
   const winners = {'A':1,'K':10,'Q':10,'J':10,0:10,9:9,8:8,7:7,6:6,5:5,4:4,3:3,2:2}
 
   useEffect(() => {
@@ -120,14 +121,6 @@ function App() {
   
 
   function findWinner(pOne, pTwo){
-  //   if(pOne[0] + pOne[1] === 21 && pTwo[0] + pTwo[1] === 21){
-  //     setWinner('Tiie!')
-  // }else if(pOne[0] + pOne[1] === 21){
-  //     setWinner('Player One Wins!')
-  // }else if(pTwo[0] + pTwo[1] === 21){
-  //     setWinner('Player Two Wins!')
-  // }
-
       if(pOne[0] + pOne[1] > pTwo[0] + pTwo[1]){
           setWinner('Player One Wins!')
       }else if(pOne[0] + pOne[1] < pTwo[0] + pTwo[1]){
