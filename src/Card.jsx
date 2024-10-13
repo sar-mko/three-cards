@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
 const Card = (item) => {
-    const [imgSource, SetImgSource] = useState('')
+    const [imgSource, setImgSource] = useState('')
 
     useEffect(() => {
-        item ? SetImgSource(item.item.image) :  SetImgSource('')
+        item ? setImgSource(item.item.image) :  setImgSource('')
     }
     ,[item])
 

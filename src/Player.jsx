@@ -11,6 +11,7 @@ const Player = ({playerNum, data, addCard}) => {
         //     setPlayerTwoCode(prevCards => [...prevCards, newCard])
         // }
         // return newCard;
+        // const data1 = data
         setPlayerData(data)
     }
     ,[data])
